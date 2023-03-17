@@ -13,12 +13,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-//exports.handler = function(event, context, callback){
+exports.handler = function(event, context, callback){
     var
         AWS = require("aws-sdk"),
         DDB = new AWS.DynamoDB({
             apiVersion: "2012-08-10",
-            region: "<FMI>"
+            region: "us-east-1"
         });
 
     function queryIndex(breed_str, cb){
@@ -29,11 +29,11 @@
                         S: breed_str
                     }
                 },
-                <FMI>n: "breed = :breed",
+                KeyConditionExpression: "breed = :breed",
                 TableName: "lostcats",
-                <FMI>: "breed_index"
+                IndexName: "breed_index"
             };
-         DDB.<FMI>(params, function(err, data){
+         DDB.query(params, function(err, data){
              var
                 cat_reply_arr = [];
              if(err){
@@ -54,7 +54,7 @@
             params = {
                 TableName: "lostcats"
             };
-         DDB.<FMI>(params, function(err, data){
+         DDB.query(params, function(err, data){
              if(err){
                  throw err;
              }
@@ -82,4 +82,4 @@
             queryIndex(breed_str, cb);
         }
     })();
-//};
+};
